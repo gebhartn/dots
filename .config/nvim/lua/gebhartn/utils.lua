@@ -67,12 +67,6 @@ function M.iexnoremap(input, output)
 end
 
 function M.reload_config()
-    for k, v in pairs(package.loaded) do
-        if string.match(k, "^gebhartn") then
-            package.loaded[k] = nil
-        end
-    end
-
     vim.cmd "luafile $MYVIMRC"
 end
 
@@ -88,6 +82,14 @@ function M.tt(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
+function M.highlight(key, fg, bg)
+    if (bg == nil) then
+        return vim.cmd(string.format("highlight %s ctermfg=%s", key, fg))
+    else
+        return vim.cmd(string.format("highlight %s ctermfg=%s ctermbg=%s", key, fg, bg))
+    end
+end
+
 function _G.smart_tab()
     return vim.fn.pumvisible() == 1 and M.tt "<C-n>" or M.tt "<Tab>"
 end
@@ -97,9 +99,7 @@ function _G.smart_enter()
 end
 
 function _G.formatting()
-    vim.lsp.buf.formatting(
-        vim.g[string.format("format_options_%s", vim.bo.filetype)] or {}
-    )
+    vim.lsp.buf.formatting(vim.g[string.format("format_options_%s", vim.bo.filetype)] or {})
 end
 
 return M

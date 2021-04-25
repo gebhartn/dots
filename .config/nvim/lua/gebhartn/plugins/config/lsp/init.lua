@@ -1,14 +1,11 @@
 local current_path = (...):gsub("%.init$", "")
+local lsp_status = require "lsp-status"
 
 local completion = require "completion"
-local lsp_status = require "lsp-status"
 
 -- Shared on_attach configuration
 local on_attach = function(client)
-    -- print("Attached to " .. client.name)
-
     completion.on_attach(client)
-    lsp_status.on_attach(client)
 
     if client.resolved_capabilities.document_formatting then
         vim.cmd [[augroup Format]]
@@ -25,7 +22,10 @@ end
 
 -- Diagnostics
 vim.lsp.handlers["textDocument/publishDiagnostics"] =
-    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {virtual_text = false, update_in_insert = true})
+    vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics,
+    {signs = true, virtual_text = false, update_in_insert = true, underline = true}
+)
 
 -- Formatting
 vim.lsp.handlers["textDocument/formatting"] = function(err, _, result, _, bufnr)
@@ -62,6 +62,12 @@ require(current_path .. ".go").setup {
 
 -- GraphQL
 require(current_path .. ".graphql").setup {
+    on_attach = on_attach,
+    capabilities = lsp_status.capabilities
+}
+
+-- HTML
+require(current_path .. ".html").setup {
     on_attach = on_attach,
     capabilities = lsp_status.capabilities
 }

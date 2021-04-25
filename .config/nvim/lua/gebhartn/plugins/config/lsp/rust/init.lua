@@ -8,6 +8,9 @@ function M.setup(lsp_opts)
             on_attach = function(client)
                 lsp_opts.on_attach(client)
                 client.resolved_capabilities.document_formatting = false
+
+                -- Inline hints
+                vim.cmd [[autocmd CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost * lua require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}]]
             end,
             capabilities = lsp_opts.capabilities,
             settings = {

@@ -1,5 +1,5 @@
 return {
-    formatCommand = 'gofmt',
+    formatCommand = "gofmt",
     formatStdin = true,
     lintCommand = "golint",
     lintIgnoreExitCode = true,

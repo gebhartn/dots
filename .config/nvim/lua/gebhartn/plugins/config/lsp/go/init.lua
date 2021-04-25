@@ -10,13 +10,13 @@ function M.setup(lsp_opts)
             vim.wo.list = false
 
             client.resolved_capabilities.document_formatting = false
+            client.resolved_capabilities.document_highlighting = false
         end,
         cmd = {"gopls", "serve"},
         settings = {
-            hoverKind = "FullDocumentation",
             gopls = {
                 analyses = {
-                    unusedparams = true
+                    unusedparams = false
                 },
                 staticcheck = true
             }
